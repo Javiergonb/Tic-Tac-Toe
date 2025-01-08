@@ -25,18 +25,18 @@ function GameBoard(){
     const markCell = (row,col, playerToken) => {
         if( row < 0 || col > 2 || col < 0 || col>2){
             console.log("Out of bounds");
-            return;
+            return false;
         }
 
         const cellAvailable = isAvailable(row,col);
         
         if(!cellAvailable){
-            console.log("Already marked!");
-            return;
+            console.log("ALREAFY MARKED TRY AGAIN!")
+            return false;
         }
 
         board[row][col].addSymbol(playerToken);
-        //console.log(`Marked with ${playerToken}`)
+        return true;
 
     }    
     
@@ -157,7 +157,10 @@ function gameController(){
 
     const playRound = (row,col) =>{
         //console.log(`${getActivePlayer().name} marking his chosen cell`)
-        board.markCell(row,col,getActivePlayer().token);
+        const markedCell = board.markCell(row,col,getActivePlayer().token);
+        if(!markedCell){
+            return;
+        }
 
         //We should also check if someone has won. If they have we end the game if not we play a new round and game continues
         const hasWinner = board.checkBoardHasWinner(getActivePlayer().token)
@@ -165,9 +168,6 @@ function gameController(){
             gameFinish();
             return;
         }
-
-        
-
 
         switchPlayerTurn();
         round++;
@@ -274,11 +274,3 @@ controller.playRound(1, 2)
 controller.playRound(2, 1)  
 controller.playRound(2, 0)  
 controller.playRound(2, 2)  
-
-
-
-
-
-
-
-
